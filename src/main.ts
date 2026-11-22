@@ -14,50 +14,48 @@ const screenCode = document.querySelector<HTMLElement>("#screen-code");
 let windOn = true;
 let screenTimer = 0;
 
-/* ---------- Live C# on the monitor ---------- */
+/* ---------- Live TypeScript on the monitor ---------- */
 const screenLines = [
-  'using System;',
+  'interface Dev {',
+  '  name: string;',
+  '  role: string;',
+  '}',
   '',
-  'public class Elmamun',
-  '{',
-  `    public string Name = "Elma'mun";`,
-  '    public string Handle = "abul_farajj";',
-  '    public string Role = "fundev";',
+  `export const elmamun: Dev = {`,
+  `  name: "Elma'mun",`,
+  '  role: "fundev",',
+  '  handle: "abul_farajj",',
   '',
-  '    public string[] Projects = {',
-  '        "NUNSA-FUD",',
-  '        "Yap",',
-  '        "Ashaari"',
-  '    };',
+  '  projects: [',
+  '    "NUNSA-FUD",',
+  '    "Yap",',
+  '    "Ashaari"',
+  '  ],',
   '',
-  '    public string[] Stack = {',
-  '        "C#", "JavaScript", "TypeScript",',
-  '        "React", "Next.js", "Firebase",',
-  '        "Node.js", "Express.js", "MySQL",',
-  '        "MongoDB"',
-  '    };',
+  '  stack: [',
+  '    "HTML", "CSS", "JavaScript",',
+  '    "TypeScript", "Next.js",',
+  '    "Node.js"',
+  '  ],',
   '',
-  '    public string[] Languages = {',
-  '        "English", "Yoruba", "Arabic",',
-  '        "Hausa", "Nigerian Pidgin",',
-  '        "Turkish (beginner)"',
-  '    };',
+  '  languages: [',
+  '    "English", "Yoruba", "Arabic",',
+  '    "Hausa", "Turkish (beginner)"',
+  '  ],',
   '',
-  '    public string Interests =',
-  '        "History, culture, linguistics";',
+  '  interests: "History, culture, linguistics",',
   '',
-  '    public void KeepBuilding()',
-  '    {',
-  '        Console.WriteLine("Keep building.");',
-  '    }',
-  '}'
+  '  keepBuilding() {',
+  '    console.log("Keep building.");',
+  '  }',
+  '};'
 ];
 
 const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/** Minimal C# highlighter: strings, keywords, types. Safe against partially typed lines. */
+/** Minimal TypeScript highlighter: strings, keywords, types. Safe against partially typed lines. */
 function highlight(line: string): string {
-  const token = /("(?:[^"\\]|\\.)*"?)|\b(using|public|class|void|new|return)\b|\b(string|System|Console)\b/g;
+  const token = /("(?:[^"\\]|\\.)*"?)|\b(interface|export|const|let|class|new|return|import|from)\b|\b(string|number|boolean|Dev|console)\b/g;
   let out = "";
   let last = 0;
   for (const match of line.matchAll(token)) {
@@ -118,16 +116,16 @@ screenTimer = window.setTimeout(typeOnMonitor, 1100);
 
 // 1) Fragments drifting through the hero scene (SVG text, scene coordinates).
 const sceneFragments: Array<[string, number, number]> = [
-  ['public class Elmamun', 18, 292],
-  ['string Handle = "abul_farajj";', 36, 56],
+  ['export const elmamun = { };', 18, 292],
+  ['const handle = "abul_farajj";', 36, 56],
   ['NUNSA-FUD', 440, 292],
-  ['while (curious) Learn();', 430, 392],
-  ['using System;', 28, 232],
-  ['var projects = new List<Project>();', 330, 14],
-  ['Console.WriteLine("still becoming");', 120, 440],
-  ['if (idea != null) Build(idea);', 380, 270],
-  ['history.ForEach(lesson => Learn(lesson));', 20, 380],
-  ['return BuildSomethingUseful();', 360, 440]
+  ['while (curious) learn();', 430, 392],
+  ['import { next } from "next";', 28, 232],
+  ['const projects: Project[] = [];', 330, 14],
+  ['console.log("still becoming");', 120, 440],
+  ['if (idea) build(idea);', 380, 270],
+  ['history.forEach(lesson => learn(lesson));', 20, 380],
+  ['return buildSomethingUseful();', 360, 440]
 ];
 function createSceneAir() {
   if (!sceneAir) return;
@@ -146,15 +144,15 @@ createSceneAir();
 
 // 2) Words drifting through the "code in the atmosphere" section.
 const floatingWords = [
-  'string Handle = "abul_farajj";', 'public class Elmamun { }',
-  'NUNSA-FUD Voting · student election platform', 'C# · JavaScript · TypeScript',
-  'React + Next.js', 'Firebase · Node.js · Express.js',
-  'MongoDB · MySQL', 'HTML · CSS · JavaScript',
-  'English · Yoruba · Arabic', 'Hausa · Nigerian Pidgin · Turkish',
+  'const handle = "abul_farajj";', 'export const elmamun = { };',
+  'NUNSA-FUD Voting · student election platform', 'JavaScript · TypeScript · Node.js',
+  'Next.js + Node.js', 'TypeScript · JavaScript',
+  'HTML · CSS · JavaScript', 'Next.js · Node.js',
+  'English · Yoruba · Arabic', 'Hausa · Turkish',
   'history.map(lesson => learn(lesson));', 'build(); learn(); repeat();',
   'curiosity is a feature, not a bug;', 'culture + code + curiosity',
   'every project teaches something new;', 'console.log("still becoming");',
-  'NUNSA-FUD', 'string Role = "fundev";'
+  'NUNSA-FUD', 'const role = "fundev";'
 ];
 function createFloatingCode() {
   if (!floatingCode) return;
@@ -174,7 +172,7 @@ createFloatingCode();
 // 3) A very faint page-wide current.
 function createGlobalAir() {
   if (!globalAir) return;
-  const fragments = ["public class Elmamun", "C# · C · JavaScript", "NUNSA-FUD", 'string Role = "fundev";', "React · Next.js", "Yoruba · Arabic · Hausa", "Windows", "build(); learn();", "HTML · CSS · JavaScript", "history → ideas"];
+  const fragments = ["export const elmamun", "JavaScript · TypeScript", "NUNSA-FUD", 'const role = "fundev";', "Next.js · Node.js", "Yoruba · Arabic · Hausa", "build(); learn();", "HTML · CSS · JavaScript", "history → ideas"];
   fragments.forEach((fragment, index) => {
     const span = document.createElement("span");
     span.textContent = fragment;
