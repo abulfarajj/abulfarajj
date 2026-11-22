@@ -14,7 +14,6 @@ const screenCode = document.querySelector<HTMLElement>("#screen-code");
 let windOn = true;
 let screenTimer = 0;
 
-/* ---------- Live TypeScript on the monitor ---------- */
 const screenLines = [
   'interface Dev {',
   '  name: string;',
@@ -53,7 +52,6 @@ const screenLines = [
 
 const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/** Minimal TypeScript highlighter: strings, keywords, types. Safe against partially typed lines. */
 function highlight(line: string): string {
   const token = /("(?:[^"\\]|\\.)*"?)|\b(interface|export|const|let|class|new|return|import|from)\b|\b(string|number|boolean|Dev|console)\b/g;
   let out = "";
@@ -78,7 +76,7 @@ function renderScreen(buffer: string) {
       return `<span class="ln"><i class="no">${String(i + 1).padStart(2, "0")}</i>${highlight(line)}${cursor}</span>`;
     })
     .join("");
-  if (editor) editor.scrollTop = editor.scrollHeight; // keep the newest line in view
+  if (editor) editor.scrollTop = editor.scrollHeight;
 }
 
 let screenLineIndex = 0;
@@ -112,9 +110,6 @@ function typeOnMonitor() {
 renderScreen("");
 screenTimer = window.setTimeout(typeOnMonitor, 1100);
 
-/* ---------- Air current: three layers, one toggle ---------- */
-
-// 1) Fragments drifting through the hero scene (SVG text, scene coordinates).
 const sceneFragments: Array<[string, number, number]> = [
   ['export const elmamun = { };', 18, 292],
   ['const handle = "abul_farajj";', 36, 56],
@@ -142,7 +137,6 @@ function createSceneAir() {
 }
 createSceneAir();
 
-// 2) Words drifting through the "code in the atmosphere" section.
 const floatingWords = [
   'const handle = "abul_farajj";', 'export const elmamun = { };',
   'NUNSA-FUD Voting · student election platform', 'JavaScript · TypeScript · Node.js',
@@ -169,7 +163,6 @@ function createFloatingCode() {
 }
 createFloatingCode();
 
-// 3) A very faint page-wide current.
 function createGlobalAir() {
   if (!globalAir) return;
   const fragments = ["export const elmamun", "JavaScript · TypeScript", "NUNSA-FUD", 'const role = "fundev";', "Next.js · Node.js", "Yoruba · Arabic · Hausa", "build(); learn();", "HTML · CSS · JavaScript", "history → ideas"];
@@ -202,14 +195,12 @@ windToggle?.addEventListener("click", () => setWind(!windOn));
 fieldToggle?.addEventListener("click", () => setWind(!windOn));
 setWind(true);
 
-/* ---------- Motion preferences and small interactions ---------- */
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 if (reducedMotion.matches) {
   window.clearTimeout(screenTimer);
   renderScreen(screenLines.join("\n"));
 }
 
-// Gentle parallax on the in-scene fragments while the current is on.
 stage?.addEventListener("pointermove", (event: PointerEvent) => {
   if (!windOn || event.pointerType === "touch") return;
   const rect = stage.getBoundingClientRect();
